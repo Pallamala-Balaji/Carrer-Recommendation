@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 CORS(app)
 
-
+# Sample Dataset (Expand with more careers & skills)
 data = {
     "Career": [
         "Frontend Developer",
@@ -64,14 +64,15 @@ data = {
 # Convert to DataFrame
 df = pd.DataFrame(data)
 
+# NLP: Convert skills into numerical features using TF-IDF
 vectorizer = TfidfVectorizer(tokenizer=lambda x: x.split(', '), token_pattern=None)
 X = vectorizer.fit_transform(df["Skills"])
 
-
+# ML Model: Train KNN for Career Recommendation
 knn = NearestNeighbors(n_neighbors=1, metric='cosine')
 knn.fit(X)
 
-
+# Function to recommend career + missing skills
 @app.route('/recommend', methods=['POST'])
 def recommend_career():
     try:
